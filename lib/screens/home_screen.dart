@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_switch/flutter_switch.dart';
 import 'package:hive/hive.dart';
 import 'package:skillup/screens/add_skills.dart';
 import 'package:skillup/screens/skill_details.dart';
 import 'package:skillup/widgets/skill_card.dart';
+import 'package:skillup/widgets/switch.dart';
 
 class HomePage extends StatefulWidget {
+  final void Function(bool) onThemeToggle;
+  final bool isDarkMode;
+  const HomePage({super.key, required this.onThemeToggle, required this.isDarkMode});
   @override
   State<HomePage> createState() => _HomePageState();
 }
@@ -92,7 +97,7 @@ class _HomePageState extends State<HomePage> {
                     skills[index] = updatedSkill;
                     skillsBox.put('skillsList', skills);
 
-                    // Force re-fetch from Hive
+
                     final savedSkills =
                         skillsBox.get('skillsList', defaultValue: []) as List;
                     final updatedSkills = savedSkills
@@ -178,6 +183,10 @@ void _deleteSkill(int index) {
         actions: [
           Row(
             children: [
+              themeSwitch(
+                isDark: widget.isDarkMode,
+                onToggle: widget.onThemeToggle,
+              ),
               GestureDetector(
                 onTap: (){
                   SnackBar snackBar = SnackBar(

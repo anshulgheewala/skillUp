@@ -32,6 +32,8 @@ dependencies:
   hive_flutter: ^1.1.0
   path_provider: ^2.1.2
   fl_chart: ^0.50.1
+  flutter_switch: ^0.3.2
+  flutter_launcher_icons: ^0.13.1
   flutter:
     sdk: flutter
 
@@ -111,5 +113,10 @@ flutter_native_splash:
     icon_background_color: "#ffffff"
     image_dark: assets/images/S.png
     icon_background_color_dark: "#ffffff"
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: assets/images/S.png
   
 

@@ -12,6 +12,7 @@ void main() async {
   await Hive.initFlutter();
 
   await Hive.openBox('skillsBox');
+  await Hive.openBox('settingsBox');
   final box = await Hive.openBox('skillsBox');
   if (box.get('isInitialized') != true) {
     await box.clear(); // Only clears ONCE
@@ -22,15 +23,47 @@ void main() async {
 }
 
 
-class skillUp extends StatelessWidget {
+class skillUp extends StatefulWidget {
+
+  @override
+  State<skillUp> createState() => _skillUpState();
+}
+
+class _skillUpState extends State<skillUp> {
+
+  ThemeMode _themeMode = ThemeMode.light;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadTheme();
+  }
+
+  void _loadTheme(){
+    final settingsBox = Hive.box('settingsBox');
+    final isDark = settingsBox.get('isDarkMode', defaultValue: false);
+    
+    _themeMode = isDark ? ThemeMode.dark : ThemeMode.light;
+    
+  }
+  void toggleTheme(bool isDark) {
+    final settingsBox = Hive.box('settingsBox');
+    settingsBox.put('isDarkMode', isDark);
+    setState(() {
+      _themeMode = isDark ? ThemeMode.dark : ThemeMode.light;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'SkillUp',
       theme: ThemeData(primarySwatch: Colors.deepPurple, useMaterial3: true),
-      home: HomePage(),
+  
       debugShowCheckedModeBanner: false,
+      themeMode: _themeMode,
+      darkTheme: ThemeData(primarySwatch: Colors.deepPurple, useMaterial3: true, brightness: Brightness.dark ),
+      home: HomePage(onThemeToggle: toggleTheme, isDarkMode: _themeMode == ThemeMode.dark),
     );
   }
 }

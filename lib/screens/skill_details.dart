@@ -49,7 +49,7 @@ class SkillDetails extends StatelessWidget {
                         final log = logs[index];
                         return ListTile(
                           title: Text('${log['hours']} hours'),
-                          subtitle: Text('updated at ${DateTime.now().hour.toString()}:${DateTime.now().minute.toString()} on ${log['date']}'),
+                          subtitle: Text('updated at ${DateTime.now().hour.toString()}:${DateTime.now().minute.toString()} on ${DateTime.now().day.toString()}/${DateTime.now().month.toString()}/${DateTime.now().year.toString()}'),
                         );
                       },
                     ),
