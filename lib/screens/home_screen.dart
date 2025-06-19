@@ -71,11 +71,11 @@ class _HomePageState extends State<HomePage> {
                       }
                     }
 
-                    // Update Hive directly
+                    
                     final updatedSkill =
                         Map<String, dynamic>.from(skills[index]);
 
-// ✅ Ensure 'logs' is initialized as a list
+
                     if (updatedSkill['logs'] == null ||
                         updatedSkill['logs'] is! List) {
                       updatedSkill['logs'] = [];
@@ -115,6 +115,55 @@ class _HomePageState extends State<HomePage> {
       },
     );
   }
+
+  void _editSkill(int index) async {
+  final result = await Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (context) => addSkills(
+        initialData: skills[index], // Pass current data
+      ),
+    ),
+  );
+
+  if (result != null && result['skillName'] != null) {
+    setState(() {
+      skills[index]['skillName'] = result['skillName'];
+      skills[index]['description'] = result['description'] ?? '';
+      skills[index]['goalHours'] = result['goalHours'] ?? skills[index]['goalHours'];
+    });
+
+    skillsBox.put('skillsList', skills);
+  }
+}
+
+
+void _deleteSkill(int index) {
+  showDialog(
+    context: context,
+    builder: (context) => AlertDialog(
+      title: Text("Delete Skill"),
+      content: Text("Are you sure you want to delete '${skills[index]['skillName']}'?"),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(context),
+          child: Text("Cancel"),
+        ),
+        ElevatedButton(
+          onPressed: () {
+            setState(() {
+              skills.removeAt(index);
+              skillsBox.put('skillsList', skills);
+            });
+            Navigator.pop(context);
+          },
+          child: Text("Delete"),
+        ),
+      ],
+    ),
+  );
+}
+
 
   final skillsBox = Hive.box('skillsBox');
   List<Map<String, dynamic>> skills = [];
@@ -180,6 +229,8 @@ class _HomePageState extends State<HomePage> {
               goal_hours: skill['goalHours'] ?? 1,
               onAddLogs: () => _showLogBottomSheet(index),
               streak: skill['streak'] ?? 0,
+              onEdit: () => _editSkill(index),
+              onDelete: () => _deleteSkill(index),
             ),
           );
         },
