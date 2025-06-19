@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:hive/hive.dart';
 import 'package:skillup/screens/add_skills.dart';
 import 'package:skillup/screens/skill_details.dart';
@@ -128,9 +129,27 @@ class _HomePageState extends State<HomePage> {
         actions: [
           Row(
             children: [
-              Icon(
-                Icons.celebration_rounded,
-                color: Colors.amber,
+              GestureDetector(
+                onTap: (){
+                  SnackBar snackBar = SnackBar(
+                    content: Text('Hurray!! You have completed $completedSkills skills!'),
+                    duration: Duration(seconds: 2),
+                    behavior: SnackBarBehavior.floating,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    padding: EdgeInsets.all(16),
+                    
+                  );
+
+                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                  
+                },
+                child: Icon(
+                  Icons.celebration_rounded,
+                  color: Colors.amber,
+                  
+                ),
               ),
               SizedBox(width: 4),
               Text(
